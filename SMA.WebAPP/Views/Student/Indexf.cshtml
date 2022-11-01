@@ -1,0 +1,168 @@
+﻿@model IEnumerable<Student> 
+
+@{
+    ViewData["Title"] = "Fetching Data From Webapi";
+}
+
+<h2>Index</h2>  
+  
+<table id="tableUser" class="table">  
+    <tr>  
+        <th>  
+            @Html.DisplayNameFor(model => model.Id)  
+        </th>  
+        <th>  
+            @Html.DisplayNameFor(model => model.Name)  
+        </th>  
+        <th>  
+            @Html.DisplayNameFor(model => model.MathsMarks)  
+        </th>  
+         <th>  
+            @Html.DisplayNameFor(model => model.ScienceMarks)  
+        </th>  
+        <th>  
+            @Html.DisplayNameFor(model => model.EnglishMarks)  
+        </th>  
+        <th>  
+            @Html.DisplayNameFor(model => model.Total)  
+        </th>  
+        <th>  
+            @Html.DisplayNameFor(model => model.Percentage)  
+        </th>
+        <th></th>  
+    </tr>  
+    <tbody>
+        @if(Model != null)
+        @foreach (var item in Model )
+        {  
+    <tr id="TableData">  
+        <td>  
+            @Html.DisplayFor(modelItem => item.Name)  
+        </td>  
+        <td>  
+            @Html.DisplayFor(modelItem => item.MathsMarks)  
+        </td>  
+        <td>  
+            @Html.DisplayFor(modelItem => item.ScienceMarks)  
+        </td>  
+        <td>  
+            @Html.DisplayFor(modelItem => item.EnglishMarks)  
+        </td> 
+        <td>  
+            @Html.DisplayFor(modelItem => item.Total)  
+        </td>
+        <td>  
+            @Html.DisplayFor(modelItem => item.Percentage)  
+        </td>
+        <td>  
+            <input type="button" id="btnEditUser" value="Edit" onclick="EditUser(@item.Id)" class="btn btn-default" /> |  //EditUser is a javascript function and passing Selected users id to the function  
+            <input type="button" id="btnDetailUser" value="Details" onclick="Details(@item.Id)" class="btn btn-default" /> |   //Details is a javascript function  
+            <input type="button" id="btnDeleteUser" value="Delete" onclick="Delete(@item.Id)" class="btn btn-default" />       //Delete is a javascript function                 
+        </td>  
+    </tr>  
+}  
+  
+</table>   
+
+            <h2>Index</h2>  
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>  
+<p>     
+    <input type="button" id="btnCreateUser" value="Create User"  class="btn btn-default" />   
+</p>  
+  
+  
+<table id="tableUser" class="table"></table>  
+  
+  
+<div id="CreateUser" class="form-horizontal">  
+    <h4>Users</h4>  
+    <hr />  
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })  
+    <div class="form-group">  
+        <label class = "control-label col-md-2">Name</label>        
+        <div class="col-md-10">  
+            <input class="form-control" type="text" name="Name" id="Name"/>            
+        </div>  
+    </div>  
+  
+    <div class="form-group">  
+        <label class="control-label col-md-2">MathsMarks</label>       
+        <div class="col-md-10">  
+            <input class="form-control" type="number" name="MathsMarks" id="MathsMarks" />             
+        </div>  
+    </div>  
+  
+    <div class="form-group">         
+        <label class="control-label col-md-2">ScienceMarks</label>  
+        <div class="col-md-10">  
+            <input class="form-control" type="number" name="ScienceMarks" id="ScienceMarks" />             
+        </div>  
+    </div>  
+    <div class="form-group">         
+        <label class="control-label col-md-2">EnglishMarks</label>  
+        <div class="col-md-10">  
+            <input class="form-control" type="number" name="EnglishMarks" id="EnglishMarks" />             
+        </div>  
+    </div>  
+  
+    <div class="form-group">  
+        <div class="col-md-offset-2 col-md-10">  
+            <input type="button" id="btnCreate"value="Create" class="btn btn-default" />  
+            <input type="button" id="btnJson" value="Create Json"  class="btn btn-default" />  
+        </div>  
+    </div>  
+</div>
+
+        <script type="text/javascript">  
+$("#btnCreate").click(function () {  
+        var objUser = {};                   //objUser is variable through which i am passing the details filled by the user to the controller  
+        objUser.Name = $("#Name").val();            //fetching value from the textbox  
+        objUser.MathsMarks = $("#MathsMarks").val();  
+        objUser.ScienceMarks = $("#ScienceMarks").val();  
+        objUser.EnglishMarks = $("#EnglishMarks").val();
+        $.post("/Users/CreateUser", { objUser: objUser }, function (data)        //data is a variable which contains the data returned from the action method  
+        {  
+            if (data != null) {                  
+                alert("User Created");  
+                location.reload();       //for refreshing the page after saving   
+            }  
+            else {  
+                alert("Error");  
+            }  
+        });  
+    })  
+ </script>  
+
+        <div id="CreateUser" class="form-horizontal"></div>  
+  
+<div class="form-horizontal" id="EditUser">  
+    <h4>Users</h4>  
+    <hr />  
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })    
+    <div class="form-group">  
+        <input type="hidden" id="IdEdit" name="IdEdit"/>  
+        <label class="control-label col-md-2">Name</label>         
+        <div class="col-md-10">  
+            <input class="form-control" type="text" name="NameEdit" id="NameEdit" />             
+        </div>  
+    </div>  
+  
+    <div class="form-group">  
+        <label class="control-label col-md-2">Address</label>       
+        <div class="col-md-10">  
+            <input class="form-control" type="text" name="AddressEdit" id="AddressEdit" />            
+        </div>  
+    </div>  
+  
+    <div class="form-group">        
+        <label class="control-label col-md-2">Phone Number</label>  
+        <div class="col-md-10">  
+            <input class="form-control" type="text" name="PhoneNumberEdit" id="PhoneNumberEdit" />            
+        </div>  
+    </div>  
+    <div class="form-group">  
+        <div class="col-md-offset-2 col-md-10">  
+            <input type="button" value="Save" id="btnSaveEdit" class="btn btn-default" />  
+        </div>  
+    </div>  
+</div> 

@@ -1,0 +1,123 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js" ></script>
+
+<h2>Add Student</h2>
+<div class="form-group" style="display:none;">
+    <input id="txtStudentId" class="form-control" name="Id" />
+</div>
+<div class="form-group">
+    <label for="Name">Name</label>
+    <input type="text" id="txtStudentName" class="form-control" name="Name" />
+</div>
+<div class="form-group">
+    <label for="MathsMarks">MathsMarks</label>
+    <input type="number" id="txtStudentMathsMarks" class="form-control" name="MathsMarks" />
+</div>
+<div class="form-group">
+    <label for="ScienceMarks">ScienceMarks</label>
+    <input type="number" id="txtStudentScienceMarks" class="form-control" name="ScienceMarks" />
+</div>
+<div class="form-group">
+    <label for="EnglishMarks">EnglishMarks</label>
+    <input type="number" id="txtStudentEnglishMarks" class="form-control" name="EnglishMarks" />
+</div>
+<div class="text-center panel-body">
+    <button id="btnSave" class="btn btn-sm btn-primary">Save</button>
+</div>
+
+<button onclick="GetAllStudents()" class="btn btn-primary">Load Students</button>
+
+<br/>
+
+<h2>Student List</h2>
+<table id="tblStudent" class="table table-sm table-striped table-bordered m-2">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>MathsMarks</th>
+            <th>ScienceMarks</th>
+            <th>EnglishMarks</th>
+            <th>Total</th>
+            <th>Percentage</th>   
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+});
+
+function GetAllStudents() {
+    debugger
+    $.getJSON("Student/GetAllStudents", function (students){
+        $("#tblStudent tbody tr").remove();
+        $.map(students, function (student) {
+            $("#tblStudent tbody").append("<tr>" 
+            +"<td>" + student.Id +"<td>"
+            +"<td>" + student.Name +"<td>"
+            +"<td>" + student.MathsMarks +"<td>"
+            +"<td>" + student.ScienceMarks +"<td>"
+            +"<td>" + student.EnglishMarks +"<td>"
+            +"<td>" + student.Total +"<td>"
+            +"<td>" + student.Percentage +"<td>"
+            +"<td>"
+            +"<button class='btn-success' onclick='Edit("+ student.Id +")' style='margin-right:5px;'>Edit</button>"
+            +"<button class='btn-danger' onclick='Delete("+ student.Id +")'>Delete</button>"
+            +"</td>"
+            +"</tr>");
+            
+        });
+    });
+}
+
+function Edit(Id) {    
+        $.getJSON("Student/GetById?Id=" + Id, function (student){
+            $("txtStudentId").val(student.Id);
+            $("txtStudentName").val(student.Name);
+            $("txtStudentMathsMarks").val(student.MathsMarks);
+            $("txtStudentScienceMarks").val(student.ScienceMarks);
+            $("txtStudentEnglishMarks").val(student.EnglishMarks);
+            $("txtStudentTotal").val(student.Total);
+            $("txtStudentPercentage").val(student.Percentage);
+        });
+
+    
+
+    function Delete(Id) {
+            $.ajax({
+                url:'Student/Delete?Id=' + Id,
+                type:'DELETE',
+                dataType:'json',
+                success: function(data) {
+                },
+                error: function(ex) {
+                    console.log('Error in operation');
+                }
+            });     
+    }
+    $("#btnSave").click(function() {
+        var oStudent = {            
+            Name:$("txtStudentName").val,
+            MathsMarks:$("txtStudentMathsMarks").val,
+            ScienceMarks:$("txtStudentScienceMarks").val,
+            EnglishMarks:$("txtStudentEnglishMarks").val
+        };
+        $.post("Student/AddUpdateStudent", oStudent)
+            .done(function(data) {
+                GetAllStudents
+            });
+
+    });   
+}
+
+</script>

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Student>
+@{
+    ViewData["Title"] = "Fetching Data From Webapi";
+}
+
+
+<table  class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>MathsMarks</th>
+            <th>ScienceMarks</th>
+            <th>EnglishMarks</th>
+            <th>Total</th>
+            <th>Percentage</th>            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr >
+                <td><Span>@item.Id</Span></td>
+                <td><Span>@item.Name</Span></td>
+                <td><Span>@item.MathsMarks</Span></td>
+                <td><Span>@item.EnglishMarks</Span></td>
+                <td><Span>@item.ScienceMarks</Span></td>
+                <td><Span>@item.Total</Span></td>
+                <td><Span>@item.Percentage</Span></td>
+                 <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

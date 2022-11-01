@@ -1,0 +1,41 @@
+﻿@using System.Data
+@model DataTable
+
+@{
+    ViewData["Title"] = "Fetching Data From Webapi";
+}
+<table  class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>MathsMarks</th>
+            <th>ScienceMarks</th>
+            <th>EnglishMarks</th>
+            <th>Total</th>
+            <th>Percentage</th>            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DataRow row in Model.Rows)
+        {
+            <tr >
+                <td><Span>@row["Id"]</Span></td>
+                <td><Span>@row["Name"]</Span></td>
+                <td><Span>@row["MathsMarks"]</Span></td>
+                <td><Span>@row["ScienceMarks"]</Span></td>
+                <td><Span>@row["EnglishMarks"]</Span></td>
+                <td><Span>@row["Total"]</Span></td>
+                <td><Span>@row["Percentage"]</Span></td>
+                 <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
